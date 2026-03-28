@@ -1,6 +1,6 @@
 import express from "express";
-import categoryRoutes from "./routes/category.routes";
-import orderRoutes from "./routes/order.routes";
+import categoryRoutes from "./routes/v1/category.routes";
+import orderRoutes from "./routes/v1/order.routes";
 import v1Routes from "./routes/v1/index"
 
 const app = express();
