@@ -52,4 +52,24 @@ constructor(
       res.status(404).json({ error: error.message });
     }
   };
+
+
+  deleteOrder = async (req: Request, res: Response) => {
+    try {
+    const id = parseInt(req.params.id as string);
+    if (isNaN(id)) {
+    return res.status(400).json({ error: "ID inválido" });
+}
+
+    const order = await this.orderService.deleteOrder(id);
+  
+    res.status(204).json({
+        message: "Orden eliminada",
+        order
+    });
+
+    } catch (error: any) {
+    res.status(404).json({ error: error.message });
+    }
+};
 }

@@ -82,10 +82,10 @@ deleteProduct = async (req: Request, res: Response) => {
         const id = parseInt(req.params.id as string);
 
         const product = await this.productService.deleteProduct(id);
-
-    res.json({
+    
+    res.status(204).json({
         message: "Producto eliminado",
-        product
+        product,
     });
 
     } catch (error: any) {

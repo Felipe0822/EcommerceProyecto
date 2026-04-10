@@ -38,4 +38,15 @@ if (!order) {
 return order;
 }
 
+async deleteOrder(id: number) {
+
+    const order = await this.orderRepository.delete(id);
+
+    if (!order) {
+    throw new Error("Orden no encontrada");
+    }
+
+    return order;
+}
+
 }

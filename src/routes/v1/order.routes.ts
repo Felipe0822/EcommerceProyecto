@@ -19,4 +19,9 @@ router.get("/:id", (req, res) => {
     controller.getOrder(req, res);
 });
 
+router.delete("/:id", (req, res) => {
+    const controller = container.resolve<OrderController>("orderController");
+    controller.deleteOrder(req, res);
+});
+
 export default router;

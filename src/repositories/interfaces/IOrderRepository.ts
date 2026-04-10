@@ -9,4 +9,6 @@ getOrders(): Promise<any[]>;
 
 getOrderWithItems(id: number): Promise<any | null>;
 
+delete(id: number): Promise<any>;
+
 }

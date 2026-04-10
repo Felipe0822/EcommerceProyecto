@@ -10,7 +10,7 @@ constructor(
 
 getCategories = async (req: Request, res: Response) => {
     const categories = await this.categoryService.getCategories();
-    res.json(categories);
+    res.status(200).json(categories);
 };
 
 getCategory = async (req: Request, res: Response) => {
@@ -79,8 +79,8 @@ deleteCategory = async (req: Request, res: Response) => {
 }
 
     const category = await this.categoryService.deleteCategory(id);
-
-    res.json({
+    
+    res.status(204).json({
         message: "Categoría eliminada",
         category
     });

@@ -9,4 +9,6 @@ getOrders(): Promise<IOrderService[]>;
 
 getOrder(id: number): Promise<IOrderService>;
 
+deleteOrder(id: number): Promise<IOrderService>;
+
 }
