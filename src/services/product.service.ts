@@ -58,6 +58,10 @@ async createProduct(
     throw new Error("Datos inválidos");
     }
 
+    if (price <= 0) {
+    throw new Error("El precio debe ser mayor a cero");
+    }
+
     return this.productRepository.create(name, price, stock, category_id);
 }
 
