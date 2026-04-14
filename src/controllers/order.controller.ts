@@ -56,8 +56,8 @@ constructor(
 
   deleteOrder = async (req: Request, res: Response) => {
     try {
-    const id = parseInt(req.params.id as string);
-    if (isNaN(id)) {
+    const id = Number.parseInt(req.params.id as string);
+    if (Number.isNaN(id)) {
     return res.status(400).json({ error: "ID inválido" });
 }
 
