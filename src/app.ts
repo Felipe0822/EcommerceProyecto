@@ -3,7 +3,7 @@ import express from "express";
 import v1Routes from "./routes/v1/index"
 
 const app = express();
-
+app.disable("x-powered-by");
 app.use(express.json());
 
 app.get("/", (req, res) => {

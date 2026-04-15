@@ -115,7 +115,7 @@ async delete(id: number) {
 
     const result = await pool.query(
       "DELETE FROM orders WHERE id=$1 RETURNING *",
-    [id]
+    [id],
     );
 
     return result.rows[0];
