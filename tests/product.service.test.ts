@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
-import { ProductService } from "../services/product.service";
+import { ProductService } from "../src/services/product.service";
 
 describe("ProductService", () => {
 
