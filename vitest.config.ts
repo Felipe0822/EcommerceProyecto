@@ -10,7 +10,7 @@ export default defineConfig({
       reporter: ["text", "html", "lcov"],
         include: ["src/**/*.ts"],
         exclude: [ 
-        ...defaultExclude, "**/*.spec.ts", "**/node_modules/**", "**/dist/**","**/external/**","**/routes/**","**/types/**","**/services/**","**/config/**","**/controllers/**","**/repositories/**"]
+        ...defaultExclude, "**/*.spec.ts", "**/node_modules/**", "**/dist/**"]
 
     }}
 });
