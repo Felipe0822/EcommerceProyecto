@@ -13,6 +13,9 @@ import { OrderService } from "../services/order.service";
 import { CategoryController } from "../controllers/category.controller";
 import { OrderController } from "../controllers/order.controller";
 import { FakeStoreService } from "../external/fakeStore.service";
+import { AuthRepository } from "../repositories/auth.repository";
+import { AuthService } from "../services/auth.service";
+import { AuthController } from "../controllers/auth.controller";
 
 export const container = createContainer({
   injectionMode: InjectionMode.CLASSIC
@@ -23,10 +26,12 @@ container.register({
 categoryRepository: asClass(CategoryRepository).scoped(),
 productRepository: asClass(ProductRepository).scoped(),
 orderRepository: asClass(OrderRepository).scoped(),
+authRepository: asClass(AuthRepository).scoped(),
 // Service
 categoryService: asClass(CategoryService).scoped(),
 productService: asClass(ProductService).scoped(),
 orderService: asClass(OrderService).scoped(),
+authService: asClass(AuthService).scoped(),
 // External
 fakeStore: asClass(FakeStoreService).scoped(),
 
@@ -34,5 +39,6 @@ fakeStore: asClass(FakeStoreService).scoped(),
 categoryController: asClass(CategoryController).scoped(),
 productController: asClass(ProductController).scoped(),
 orderController: asClass(OrderController).scoped(),
+authController: asClass(AuthController).scoped(),
 
 });

@@ -1,4 +1,3 @@
-import { error } from "node:console";
 import { pool } from "../config/db";
 import { ICategoryRepository } from "./interfaces/ICategoryRepository";
 
