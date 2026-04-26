@@ -4,7 +4,9 @@ import { AuthRepository } from "../repositories/auth.repository";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
-const SECRET = "supersecret";
+const SECRET = process.env.JWT_SECRET || (() => {
+  throw new Error("JWT_SECRET environment variable is not defined");
+})();
 
 export class AuthService implements IAuthService {
 
