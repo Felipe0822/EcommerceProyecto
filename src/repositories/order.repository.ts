@@ -50,6 +50,17 @@ async createOrderWithItems(customer_name: string, items: any[]) {
           productPrice
         ]
       );
+          // 🔥 3. DESCONTAR STOCK
+  const updateResult = await client.query(
+  `UPDATE products
+   SET stock = stock - $1
+   WHERE id = $2 AND stock >= $1`,
+  [item.quantity, item.product_id]
+);
+
+if (updateResult.rowCount === 0) {
+  throw new Error(`Stock insuficiente para producto ${item.product_id}`);
+}
     }
 
     // 🔥 3. ACTUALIZAR TOTAL
@@ -57,12 +68,15 @@ async createOrderWithItems(customer_name: string, items: any[]) {
       `UPDATE orders SET total = $1 WHERE id = $2`,
       [total, order.id]
     );
+    
 
    // 🔥 4. traer orden actualizada
 const updatedOrderResult = await client.query(
   `SELECT * FROM orders WHERE id = $1`,
   [order.id]
 );
+
+
 
 await client.query("COMMIT");
 

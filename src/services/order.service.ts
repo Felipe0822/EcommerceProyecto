@@ -9,19 +9,14 @@ constructor(
 
 async createOrder(customer_name: string, items: any[]) {
 
-if (!customer_name) {
-    throw new Error("El nombre del cliente es obligatorio");
-}
-
-if (!items || items.length === 0) {
+  if (!items || items.length === 0) {
     throw new Error("El pedido no tiene productos");
-}
+  }
 
-  // ✅ SOLO UNA LLAMADA
-return this.orderRepository.createOrderWithItems(
+  return this.orderRepository.createOrderWithItems(
     customer_name,
     items
-);
+  );
 }
 async getOrders() {
     return this.orderRepository.getOrders();

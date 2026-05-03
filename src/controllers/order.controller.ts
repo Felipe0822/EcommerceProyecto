@@ -14,8 +14,8 @@ constructor(
       const { customer_name, items } = req.body;
 
 
-      const order = await this.orderService.createOrder(customer_name, items);
-
+      const order = await this.orderService.createOrder(customer_name,items);
+        
       res.status(201).json(order);
 
     } catch (error: any) {

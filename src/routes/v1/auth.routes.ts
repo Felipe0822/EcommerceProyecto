@@ -9,7 +9,7 @@ router.post("/", (req, res) => {
     controller.register(req, res);
 });
 
-router.post("/", (req, res) => {
+router.post("/login", (req, res) => {
     const controller = container.resolve<AuthController>("authController");
     controller.login(req, res);
 });

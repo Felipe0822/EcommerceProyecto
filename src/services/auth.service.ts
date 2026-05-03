@@ -1,6 +1,5 @@
 import { IAuthService } from "./interfaces/IAuth.service";
 import { IAuthRepository } from "../repositories/interfaces/IAuth.repository";
-import { AuthRepository } from "../repositories/auth.repository";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 

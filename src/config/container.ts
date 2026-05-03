@@ -27,7 +27,7 @@ categoryRepository: asClass(CategoryRepository).scoped(),
 productRepository: asClass(ProductRepository).scoped(),
 orderRepository: asClass(OrderRepository).scoped(),
 authRepository: asClass(AuthRepository).scoped(),
-// Service
+// Servic
 categoryService: asClass(CategoryService).scoped(),
 productService: asClass(ProductService).scoped(),
 orderService: asClass(OrderService).scoped(),
