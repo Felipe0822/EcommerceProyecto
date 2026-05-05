@@ -13,6 +13,10 @@ async createOrder(customer_name: string, items: any[]) {
     throw new Error("El pedido no tiene productos");
   }
 
+  if(!customer_name){
+    throw new Error("El nombre del cliente es obligatorio");
+  }
+
   return this.orderRepository.createOrderWithItems(
     customer_name,
     items

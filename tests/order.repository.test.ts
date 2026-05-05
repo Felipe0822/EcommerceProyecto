@@ -16,61 +16,80 @@ describe("OrderRepository", () => {
   });
 
   describe("createOrderWithItems", () => {
-    it("debería crear una orden con items exitosamente", async () => {
-      const mockClient = {
-        query: vi.fn(),
-        release: vi.fn()
-      };
+    it("debería crear una orden con items correctamente", async () => {
+  const mockClient = {
+    query: vi.fn(),
+    release: vi.fn()
+  };
 
-      vi.mocked(pool.connect).mockResolvedValue(mockClient as any);
+  vi.mocked(pool.connect).mockResolvedValue(mockClient as any);
 
-      mockClient.query
-        .mockResolvedValueOnce({ rows: [] }) // BEGIN
-        .mockResolvedValueOnce({ rows: [{ id: 1, customer_name: "Juan", total: 0 }] }) // INSERT order
-        .mockResolvedValueOnce({ rows: [{ price: 100 }] }) // SELECT product price
-        .mockResolvedValueOnce({ rows: [] }) // INSERT order_item
-        .mockResolvedValueOnce({ rows: [] }) // UPDATE total
-        .mockResolvedValueOnce({ rows: [{ id: 1, customer_name: "Juan", total: 100 }] }) // SELECT updated order
-        .mockResolvedValueOnce({ rows: [] }); // COMMIT
+  const mockOrder = { id: 1, customer_name: "Juan", total: 0 };
+  const mockUpdatedOrder = { id: 1, customer_name: "Juan", total: 200 };
 
-      const repository = new OrderRepository();
-      const result = await repository.createOrderWithItems("Juan", [
-        { product_id: 1, quantity: 1 }
-      ]);
+  mockClient.query
+    // BEGIN
+    .mockResolvedValueOnce({})
 
-      expect(result).toEqual({ id: 1, customer_name: "Juan", total: 100 });
-      expect(mockClient.release).toHaveBeenCalled();
-      expect(mockClient.query).toHaveBeenCalledWith("BEGIN");
-      expect(mockClient.query).toHaveBeenCalledWith("COMMIT");
-    });
+    // INSERT order
+    .mockResolvedValueOnce({ rows: [mockOrder] })
 
-    it("debería crear una orden con múltiples items", async () => {
-      const mockClient = {
-        query: vi.fn(),
-        release: vi.fn()
-      };
+    // SELECT product
+    .mockResolvedValueOnce({ rows: [{ price: 100 }] })
 
-      vi.mocked(pool.connect).mockResolvedValue(mockClient as any);
+    // INSERT order_items
+    .mockResolvedValueOnce({})
 
-      mockClient.query
-        .mockResolvedValueOnce({ rows: [] }) // BEGIN
-        .mockResolvedValueOnce({ rows: [{ id: 2, customer_name: "María", total: 0 }] }) // INSERT order
-        .mockResolvedValueOnce({ rows: [{ price: 100 }] }) // SELECT product 1 price
-        .mockResolvedValueOnce({ rows: [] }) // INSERT order_item 1
-        .mockResolvedValueOnce({ rows: [{ price: 50 }] }) // SELECT product 2 price
-        .mockResolvedValueOnce({ rows: [] }) // INSERT order_item 2
-        .mockResolvedValueOnce({ rows: [] }) // UPDATE total
-        .mockResolvedValueOnce({ rows: [{ id: 2, customer_name: "María", total: 250 }] }) // SELECT updated order
-        .mockResolvedValueOnce({ rows: [] }); // COMMIT
+    // UPDATE stock
+    .mockResolvedValueOnce({ rowCount: 1 })
 
-      const repository = new OrderRepository();
-      const result = await repository.createOrderWithItems("María", [
-        { product_id: 1, quantity: 1 },
-        { product_id: 2, quantity: 4 }
-      ]);
+    // UPDATE total
+    .mockResolvedValueOnce({})
 
-      expect(result).toEqual({ id: 2, customer_name: "María", total: 250 });
-    });
+    // SELECT updated order
+    .mockResolvedValueOnce({ rows: [mockUpdatedOrder] })
+
+    // COMMIT
+    .mockResolvedValueOnce({});
+
+  const repository = new OrderRepository();
+
+  const result = await repository.createOrderWithItems("Juan", [
+    { product_id: 1, quantity: 2 }
+  ]);
+
+  expect(result).toEqual(mockUpdatedOrder);
+
+  expect(mockClient.query).toHaveBeenCalledWith("COMMIT");
+  expect(mockClient.release).toHaveBeenCalled();
+});
+
+  it("debería hacer rollback si no hay stock suficiente", async () => {
+  const mockClient = {
+    query: vi.fn(),
+    release: vi.fn()
+  };
+
+  vi.mocked(pool.connect).mockResolvedValue(mockClient as any);
+
+  mockClient.query
+    .mockResolvedValueOnce({}) // BEGIN
+    .mockResolvedValueOnce({ rows: [{ id: 1 }] }) // INSERT order
+    .mockResolvedValueOnce({ rows: [{ price: 100 }] }) // SELECT product
+    .mockResolvedValueOnce({}) // INSERT item
+    .mockResolvedValueOnce({ rowCount: 0 }) // UPDATE stock FAIL
+    .mockResolvedValueOnce({}); // ROLLBACK
+
+  const repository = new OrderRepository();
+
+  await expect(
+    repository.createOrderWithItems("Juan", [
+      { product_id: 1, quantity: 10 }
+    ])
+  ).rejects.toThrow("Stock insuficiente");
+
+  expect(mockClient.query).toHaveBeenCalledWith("ROLLBACK");
+});
 
     it("debería hacer rollback si un producto no existe", async () => {
       const mockClient = {

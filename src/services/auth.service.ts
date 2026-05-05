@@ -3,15 +3,14 @@ import { IAuthRepository } from "../repositories/interfaces/IAuth.repository";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
-const SECRET = process.env.JWT_SECRET || (() => {
-  throw new Error("JWT_SECRET environment variable is not defined");
-})();
 
 export class AuthService implements IAuthService {
 
   constructor(
       private readonly authRepository : IAuthRepository
       ){ }
+
+      
 
   async register(data: any): Promise<any> {
 
@@ -26,6 +25,12 @@ export class AuthService implements IAuthService {
   async login(email: string, password: string): Promise<any> {
 
     const user = await this.authRepository.findUserByEmail(email);
+
+    const secret = process.env.JWT_SECRET;
+
+if (!secret) {
+  throw new Error("JWT_SECRET environment variable is not defined");
+}
 
     if (!user) {
       throw new Error("Usuario no encontrado");
@@ -42,7 +47,7 @@ export class AuthService implements IAuthService {
         id: user.id,
         role: user.role
       },
-      SECRET,
+      secret,
       { expiresIn: "1h" }
     );
 
@@ -90,7 +95,7 @@ async deleteUser(id: number) {
     if (!user) {
         throw new Error("Usuario no encontrado");
     }
-    return user;
+    return await this.authRepository.deleteUser(id);
 }
   
 }
