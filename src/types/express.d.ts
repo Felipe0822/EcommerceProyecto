@@ -1,4 +1,5 @@
 import { AwilixContainer } from "awilix";
+import "express";
 
 declare global {
   namespace Express {
@@ -6,6 +7,14 @@ declare global {
       scope: AwilixContainer;
     }
   }
+}
+
+declare module "express-serve-static-core" {
+
+  interface Request {
+    user?: any;
+  }
+
 }
 
 export {};

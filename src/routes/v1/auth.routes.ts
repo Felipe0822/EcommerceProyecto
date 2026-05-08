@@ -1,6 +1,8 @@
 import { Router } from "express";
 import { AuthController } from "../../controllers/auth.controller";
 import { container } from "../../config/container";
+import { authMiddleware } from "../../middlewares/auth.middleware";
+import { requireRole } from "../../middlewares/role.middleware";
 
 const router = Router();
 
@@ -14,7 +16,8 @@ router.post("/login", (req, res) => {
     controller.login(req, res);
 });
 
-router.get("/", (req, res) => {
+router.get("/", authMiddleware,
+    requireRole(["ADMIN"]), (req, res) => {
     const controller = container.resolve<AuthController>("authController");
     controller.getUsers(req, res);
 });
