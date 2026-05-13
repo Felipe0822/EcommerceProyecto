@@ -117,7 +117,11 @@ export class AuthController {
       }
 
       await this.authService.deleteUser(id);
-      res.status(200).json({ message: "Usuario eliminado correctamente" });
+      
+      return res.status(200).json({
+      message: "Usuario eliminado correctamente"
+    });
+
 
     } catch (error: any) {
       res.status(404).json({ error: error.message });

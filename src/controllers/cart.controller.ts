@@ -84,7 +84,7 @@ export class CartController {
 
     } catch (error: any) {
 
-      res.status(404).json({
+      res.status(400).json({
         error: error.message
       });
 

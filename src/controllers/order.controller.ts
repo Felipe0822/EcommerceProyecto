@@ -63,7 +63,7 @@ constructor(
 
     const order = await this.orderService.deleteOrder(id);
   
-    res.status(204).json({
+    res.status(200).json({
         message: "Orden eliminada",
         order
     });

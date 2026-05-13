@@ -83,7 +83,7 @@ deleteProduct = async (req: Request, res: Response) => {
 
         const product = await this.productService.deleteProduct(id);
     
-    res.status(204).json({
+    res.status(200).json({
         message: "Producto eliminado",
         product,
     });

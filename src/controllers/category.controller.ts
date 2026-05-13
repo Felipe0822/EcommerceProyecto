@@ -80,7 +80,7 @@ deleteCategory = async (req: Request, res: Response) => {
 
     const category = await this.categoryService.deleteCategory(id);
     
-    res.status(204).json({
+    res.status(200).json({
         message: "Categoría eliminada",
         category
     });
